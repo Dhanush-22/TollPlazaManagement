@@ -1,8 +1,6 @@
 # Toll Plaza Managemnet System using ANPR
-
-This project aims to build an efficient toll collection system on highways by reading the license plate of vehicles (using AUTOMATIC NUMBER PLATE RECOGNITION) from the existing CCTV cameras at tolls and debiting the credits from the vehicle. It is a web application built using the Django framework and other web technologies. It contains a few client-side components of the existing fast tag application (like register, recharge, etc). This web application allows users to register their vehicles and recharge credits. 
-Further, it can be improved by reading more vehicle number plates at a time using drone technology and image pre-processing techniques.
-
+#### using Django Framework
+The project aims to build a web application for an efficient toll collection system on highways by reading the license plate (using AUTOMATIC NUMBER PLATE RECOGNITION) from the existing CCTV cameras at tolls and debiting the credits from a vehicle. This web application allows users to register their vehicles and recharge credits to cross tolls. 
 
 
 ## Project in progress ..
