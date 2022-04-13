@@ -10,7 +10,7 @@
           <h2 class="my-4">Add a new movie script</h2>
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-                <input type="file" name="upload" accept=".jpg, .jpeg">
+                <input type="file" name="upload" accept=".jpg, .jpeg, .png">
                 <br>
                 <button class="btn btn-dark my-4" type="submit">Submit</button>
           </form>

@@ -131,12 +131,24 @@ def test(request):
                 i -= 1
             i += 1
         return "".join(s)
-    
+
     if request.method == 'POST' and request.FILES['upload']:
         upload = request.FILES['upload']
+
+        # print("\n \n")
+        # print(type(upload))
+        # print(upload)
+        # print(upload.name)
+        # print("\n \n")
+
         fss = FileSystemStorage()
+        print(type(fss))
+        print(fss)
+
+
         file = fss.save(upload.name, upload)
         stat = "not found"
+
         for img in glob.glob("C:\/Users\dell\Documents\Cpp VS\myProject\media\*.jpg"):
             name = ""
             i = len(img)-1
@@ -227,26 +239,14 @@ def displayWorkerLogin(request):
     return render(request,'workerLoginPage.html')
 
 def validateAL(request):
-
-    # user2 = User()
-    # user2.First_Name = "Jack"
-    # user2.Last_Name = "Aaron"
-    # user2.License_num = "LRTS0512"
-    # user2.Vehicle_Number = "AP16L1234"
-    # user2.Vehicle_Name = "Inova 2nd Model"
-    # user2.is_verified = False
-
-    # newUsers = [user1, user2, user3, user4]
-
-    Users = User.objects.all()
-    print(Users)
+    # Users = User.objects.all()
+    # print(Users)
     newUsers = []
     UserExtras = User_Extra.objects.all()
 
     for user in UserExtras:
         if(user.is_verified==0):
-            newUsers = newUsers + [user]
-    
+            newUsers = newUsers + [user]   
     print("\n \n")
     print(newUsers)
     return render(request, 'adminWorkPage.html', {'newUsers' : newUsers})
@@ -282,36 +282,48 @@ def debitCredits(request):
 
 
 def registerNew(request):
-    first_name = request.POST.get('first','default')
-    last_name = request.POST.get('last','default')
-    email = request.POST.get('email','default')
-    phone = request.POST.get('phone','default')
-    veh_num = request.POST.get('veh_num','default')
-    veh_name = request.POST.get('vehName','default')
-    license_num = request.POST.get('license_num','default')
-    pswd = request.POST.get('psw','default')
-    username = first_name + "_"+ last_name
+    if request.method == 'POST' and request.FILES['upload1']:
+        up = request.FILES['upload1']
+        first_name = request.POST.get('first','default')
+        last_name = request.POST.get('last','default')
+        email = request.POST.get('email','default')
+        phone = request.POST.get('phone','default')
+        veh_num = request.POST.get('veh_num','default')
+        veh_name = request.POST.get('vehName','default')
+        license_num = request.POST.get('license_num','default')
+        pswd = request.POST.get('psw','default')
+        username = first_name + "_"+ last_name
 
-    #To check whether username exists or not
-    if User.objects.filter(username=username).exists():
-        messages.info(request,"Oops! username already exists" )
-    
-    else:
-        # Create a User object after validating the abouve stuff
-        newUser = User.objects.create_user(username = username, password = pswd, email=email, first_name=first_name,
-        last_name=last_name)
-        newUserExtra = User_Extra.objects.create(First_Name=first_name, Last_Name = last_name, License_num = license_num
-        , Vehicle_Number=veh_num, Vehicle_Name = veh_name, is_verified=0)
-        full_name = first_name + " "+ last_name
-        newVehicle = Vehicle.objects.create(owner_name=full_name, veh_no = veh_num, balance=0)
-        newUser.save()
-        newUserExtra.save()
-        newVehicle.save()
-        print("\n \n Both saved successfully \n \n")
+        # saving the file
+
+        # print("\n \n")
+        # print(type(up))
+        # print(up)
+        # print(up.name)
+        # print("\n \n")
+
+        #To check whether username exists or not
+        if User.objects.filter(username=username).exists():
+            messages.info(request,"Oops! username already exists" )
         
-
-        messages.info(request,"Dear "+ str(first_name) +", your account has been created : )  Now you can login" )
-    # print("Redirecting...........................")
+        else:
+            fss = FileSystemStorage()
+            file = fss.save(up.name, up)
+        
+            # Create a User object after validating the abouve stuff
+            newUser = User.objects.create_user(username = username, password = pswd, email=email, first_name=first_name,
+            last_name=last_name)
+            newUserExtra = User_Extra.objects.create(First_Name=first_name, Last_Name = last_name, License_num = license_num
+            , Vehicle_Number=veh_num, Vehicle_Name = veh_name, is_verified=0,License_img=up.name)
+            full_name = first_name + " "+ last_name
+            newVehicle = Vehicle.objects.create(owner_name=full_name, veh_no = veh_num, balance=0)
+            newUser.save()
+            newUserExtra.save()
+            newVehicle.save()
+            # print("\n \n Both saved successfully \n \n")
+            messages.info(request,"Dear "+ str(first_name) +", your account has been created : )  Now you can login" )
+        # print("Redirecting...........................")
+        return redirect('startPage')
     return redirect('startPage')
 
 

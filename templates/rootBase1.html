@@ -78,7 +78,7 @@
   </div>
   <div id="id00" class="modal">
 
-    <form class="modal-content animate" action="enrollNew/" method="post">
+    <form class="modal-content animate" action="enrollNew/" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="imgcontainer">
         <span onclick="document.getElementById('id00').style.display='none'" class="close"
@@ -110,6 +110,9 @@
 
         <label for="vehName"><b>Vechicle name</b></label>
         <input type="text" placeholder="(name as per in driving license)" name="vehName" required>
+        <br>
+        <input type="file" name="upload1" accept=".jpg, .jpeg, .png">
+        <br>
 
         <!-- <label for="psw"><b>Password</b></label>
           <input type="password" placeholder="Enter Password" id="pswd1" name="pswd1" required>
