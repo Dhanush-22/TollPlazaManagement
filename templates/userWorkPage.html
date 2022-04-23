@@ -1,15 +1,57 @@
 {% extends 'base1.html' %}
 {% block content %}
 
-
-<h4>Hello {{name}}, you can do the following activities</h4>
-
-<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus temporibus eius distinctio, quidem ea deserunt corrupti neque voluptas, velit doloremque quia delectus! Dolorem quis voluptatibus in quibusdam repellendus deleniti quos dolore ipsam, at numquam eaque non. Soluta aliquid quaerat eligendi?</p>
-
 <!-- <button class="submit" onclick="" >Logout</button> -->
 <li><a href="http://127.0.0.1:8000/">Logout</a></li>
-<p>Description</p>
-<p>MY VEHICLE DETAILS</p>
-<p>RECHARGE</p>
-<p>CHANGE INFO</p>
+
+<div>
+    {% for message in messages %}
+    <div class="alert">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+      <strong>{{message}}</strong> 
+    </div>
+    {% endfor %}
+</div>
+
+<div>
+    {% if isValidUser == 0 %}
+        <p>Dear user, your account has not yet verified. In case of any issues contact us.</p>
+    {% endif %}
+</div>
+<div>
+    {% if isValidUser == -1 %}
+        <p style="color: red;">Dear user, your account has rejected.</p>
+    {% endif %}
+</div>
+
+
+{% if isValidUser == 1 %}
+
+<h4>Hello {{f_name}}, you can do the following activities</h4>
+
+<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus temporibus eius distinctio, quidem ea deserunt
+    corrupti neque voluptas, velit doloremque quia delectus! Dolorem quis voluptatibus in quibusdam repellendus deleniti
+    quos dolore ipsam, at numquam eaque non. Soluta aliquid quaerat eligendi?</p>
+
+<h2>YOUR VEHICLE DETAILS</h2>
+{% for v in veh_list %}
+    <p>Vehicle Number : {{v.veh_no}}</p>
+    <p>Balance : {{v.balance}}</p>
+    <br>
+    <br>
+{% endfor %}
+
+<form  action="payment/" method="post">
+    {% csrf_token %}
+    <div>
+        <label for="vehNo"><b>Enter Vehicle number : </b></label>
+        <input type="text" placeholder="SS00S1234" name="vehNo" required>
+        <label for="amt"><b>Enter amount : </b></label>
+        <input type="text" placeholder="100/200/500" name="amt" required>
+        <button type="submit" style="background-color: aqua;">RECHARGE</button>
+    </div>
+</form>
+
+{% endif %}
+
 {% endblock %}

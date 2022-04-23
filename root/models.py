@@ -13,23 +13,7 @@ class Vehicle(models.Model):
     balance = models.IntegerField(default=0)
     def __str__(self):
         return self.owner_name
-
-# class User_1(models.Model) :
-#     First_Name = models.CharField(max_length=100)
-#     Last_Name = models.CharField(max_length=100)
-#     Email = models.CharField(max_length=100)
-#     Phone_num = models.CharField(max_length=20)
-#     Password = models.CharField(max_length=20) 
-#     Registered_date = models.DateField(default=datetime.date.today())  #----------------------
-#     def __str__(self):
-#         return self.First_Name + " " + self.Last_Name
-
-
-# class User_1Form(forms.ModelForm()):
-#     Password = forms.CharField(widget=forms.PasswordInput)
-#     class Meta:
-#         model = User_1
-
+        
 
 class LicenseHolder(models.Model):
     First_Name = models.CharField(max_length=100)

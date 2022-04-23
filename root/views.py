@@ -3,16 +3,17 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
+from django.views.decorators.csrf import csrf_exempt
 from .models import *
 import pymysql
-
-#start
+import razorpay
 
 import cv2
 import imutils
 import numpy as np
 import pytesseract
 import glob
+
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
@@ -239,8 +240,6 @@ def displayWorkerLogin(request):
     return render(request,'workerLoginPage.html')
 
 def validateAL(request):
-    # Users = User.objects.all()
-    # print(Users)
     newUsers = []
     UserExtras = User_Extra.objects.all()
 
@@ -256,29 +255,48 @@ def validateUL(request):
     if request.method == "POST":
         username = request.POST['uname1']
         pswd = request.POST['psw1']
-
+        isValid = 0
         user = auth.authenticate(username=username,password=pswd)
+        f_name = username
         if user is not None:
             auth.login(request, user)
             name = user
-            return render(request,'userWorkPage.html',{'name':name})
+            f_name,l_name = username.split("_")
+            this_users = User_Extra.objects.filter(First_Name=f_name,Last_Name=l_name)
+            print(this_users)
+            user_vehicles = []
+            for u in this_users:
+                veh_obj = Vehicle.objects.get(veh_no=str(u.Vehicle_Number))
+                isValid = u.is_verified
+                user_vehicles.append(veh_obj)
+            print("\n \n")
+            return render(request,'userWorkPage.html',{'name':f_name, 'veh_list':user_vehicles, 'isValidUser':isValid})
         else :
             messages.error(request,"Invalid username or password" )
             return redirect('startPage')
 
         
-
-
 def validateWL(request):
-    # return render(request, 'workerWorkPage.html')
     return render(request,'detectPage.html')
 
-def debitCredits(request):
+def debitCredit(request):
     number = request.POST.get('num','')
-    messages.info(request,"Credits debited on vehicle "+ str(number))
-    print("Redirecting...........................")
-    return redirect('debit')
-    # return render(request,'debitStat.html',{'status':stat})
+    veh_obj = Vehicle.objects.filter(veh_no = number)
+    # a = int(input("Enter the value : "))
+    if len(veh_obj) >0 :
+        veh_obj = Vehicle.objects.get(veh_no = number)
+        credits = veh_obj.balance
+        tax = 50
+        stat = "Success"
+        if tax>credits :
+            stat = "No enough credits"
+        else:
+            credits = credits-tax
+            veh_obj.balance = credits
+            veh_obj.save()
+    else:
+        stat = "Vehicle not yet registered."
+    return render(request,'debitStat.html',{'status':stat})
 
 
 def registerNew(request):
@@ -321,10 +339,51 @@ def registerNew(request):
             newUserExtra.save()
             newVehicle.save()
             # print("\n \n Both saved successfully \n \n")
-            messages.info(request,"Dear "+ str(first_name) +", your account has been created : )  Now you can login" )
+            messages.info(request,"Dear "+ str(first_name) +", your account has been created : )  Now you can login using " +str(username) + " as username." )
         # print("Redirecting...........................")
         return redirect('startPage')
     return redirect('startPage')
+
+
+
+
+def doPayment(request):
+    if request.method == "POST":
+        # order_amount = 200
+        order_amount = request.POST['amt']
+        order_amount = order_amount + "00"
+        print(type(order_amount))
+        order_amount = int(order_amount)
+        vehicle_num = request.POST['vehNo']
+        print(order_amount)
+        print(vehicle_num)
+        order_currency = 'INR'
+        client = razorpay.Client(auth=('rzp_test_aQdqNW0mKjsYkA','A7BHFuErU1PKBcMDM7ZT0MRC'))
+        payment = client.order.create({'amount':order_amount, 'currency':'INR', 'payment_capture':'1'})
+    return render(request,'PaymentPage.html',{'payment':payment})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
