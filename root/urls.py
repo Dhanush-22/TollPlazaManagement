@@ -17,6 +17,7 @@ urlpatterns = [
     path('validateUL/',views.validateUL,name='UL validation'),
     path('validateWL/',views.validateWL,name='WL validation'),
     path('validateWL/debit/',views.debitCredit,name='debitC'),
+    path('validateWL/detectAndDebit/',views.DetectAndDebit,name='detectD'),
     path('validateWL/detect/',views.detectAndDebit,name='detect'),
     path('upload/',views.test,name="test"),
     path('enrollNew/',views.registerNew,name="enrollNew"),

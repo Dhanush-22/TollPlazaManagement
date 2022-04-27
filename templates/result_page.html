@@ -1,0 +1,18 @@
+{% extends 'base1.html' %}
+{% block content %}
+
+<div>
+    <li><a href="http://127.0.0.1:8000/validateWL/detectAndDebit/">Go back</a></li>
+        
+    {% for i in list %}
+    <div class="N_List">
+        <p>Name : <strong>{{i.owner_name}}</strong></p>
+        <p>Vehicle number : <strong>{{i.veh_no}}</strong></p>
+        <br>
+        <br>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
