@@ -402,7 +402,8 @@ def DetectAndDebit(request):
             cv2.waitKey(500)
             count += 1
 
-            SECRET_KEY = 'sk_13e457114d7cbf9fd86db7ff'
+            # SECRET_KEY = 'sk_13e457114d7cbf9fd86db7ff'
+            SECRET_KEY = 'sk_cca2f787701bddaa4514394d'
             with open(img_name, 'rb') as image_file:
                 img_base64 = base64.b64encode(image_file.read())
 

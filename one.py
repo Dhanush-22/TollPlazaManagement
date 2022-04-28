@@ -41,6 +41,9 @@ for img in glob.glob("C:\\NIT AP\\EPICS\\DataSet\\w1\\*.jpg"):
         cv2.destroyAllWindows()
 
         edged = cv2.Canny(gray, 170, 200)  #170,200
+        cv2.imshow('Check : ', edged)
+        cv2.waitKey(5000)
+        cv2.destroyAllWindows()
         contours = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = imutils.grab_contours(contours)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:10] #:30
@@ -63,11 +66,20 @@ for img in glob.glob("C:\\NIT AP\\EPICS\\DataSet\\w1\\*.jpg"):
         if detected == 1:
             cv2.drawContours(img, [screenCnt], -1, (0, 0, 255), 3)
 
+        cv2.imshow('Check : ', img)
+        cv2.waitKey(5000)
+        cv2.destroyAllWindows()
+
 
         mask = np.zeros(gray.shape, np.uint8)
         if detected==1:
             new_image = cv2.drawContours(mask, [screenCnt], 0, 255, -1, )
         new_image = cv2.bitwise_and(img, img, mask=mask)
+
+
+        cv2.imshow('Check : ', new_image)
+        cv2.waitKey(5000)
+        cv2.destroyAllWindows()
 
 
         (x, y) = np.where(mask == 255)
@@ -78,6 +90,10 @@ for img in glob.glob("C:\\NIT AP\\EPICS\\DataSet\\w1\\*.jpg"):
 
             (bottomx, bottomy) = (np.max(x), np.max(y))
             Cropped = gray[topx:bottomx + 1, topy:bottomy + 1]
+
+            cv2.imshow('Check : ', Cropped)
+            cv2.waitKey(5000)
+            cv2.destroyAllWindows()
 
             text = pytesseract.image_to_string(Cropped, config='--psm 11')
             if (len(text) >5):
